@@ -1,0 +1,66 @@
+public class UserModel extends AbstractTableModel {
+	private static final long serialVersionUID = 1L;
+	private UserDao userDao;
+	private Vector<String> columnNames;
+	private Vector<Vector<String>> rowData;
+	
+	public Vector<Vector<String>> getRowData() {
+		return rowData;
+	}
+
+	public void setRowData(Vector<Vector<String>> rowData) {
+		this.rowData = rowData;
+	}
+
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
+	public UserModel() {
+		userDao = new UserDao();
+		initData();
+	}
+	
+	public void initData() {
+		columnNames = new Vector<String>();
+		columnNames.add("用户昵称");
+		columnNames.add("用户密码");
+		columnNames.add("用户名");
+		List<User> users = userDao.list();
+		Vector<String> ue = null;
+		rowData = new Vector<Vector<String>>();
+		for(User u:users) {
+			ue = new Vector<String>();
+			ue.add(u.getNickname());
+			ue.add(u.getPassword());
+			ue.add(u.getUsername());
+			rowData.add(ue);
+		}
+	}
+
+	@Override
+	public int getColumnCount() {
+		return columnNames.size();
+	}
+
+	@Override
+	public int getRowCount() {
+		return rowData.size();
+	}
+
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		return rowData.get(rowIndex).get(columnIndex);
+	}
+
+	@Override
+	public String getColumnName(int column) {
+		return columnNames.get(column);
+	}
+	
+	
+}
